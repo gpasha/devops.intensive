@@ -10,8 +10,8 @@ const E2E_RESET_TOKEN = 'e2e-reset-course-DevOps-2026';
  * from a clean state. Works against any environment (local or deployed).
  */
 export async function resetTodos(api?: APIRequestContext) {
-  const ctx = api ?? (await request.newContext({ baseURL: API }));
-  const res = await ctx.post('/test/reset', {
+  const ctx = api ?? (await request.newContext());
+  const res = await ctx.post(`${API}/test/reset`, {
     headers: { 'x-e2e-reset-token': E2E_RESET_TOKEN },
   });
   if (!res.ok()) {
@@ -24,8 +24,8 @@ export async function createTodoViaApi(
   title: string,
   description?: string,
 ): Promise<{ id: string; title: string; description: string | null }> {
-  const ctx = await request.newContext({ baseURL: API });
-  const res = await ctx.post('/todos', {
+  const ctx = await request.newContext();
+  const res = await ctx.post(`${API}/todos`, {
     data: { title, ...(description ? { description } : {}) },
   });
   if (!res.ok()) {
