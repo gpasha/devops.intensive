@@ -6,11 +6,11 @@ on:
  
 jobs:
   checks:
-    uses: ./.github/workflows/typecheck.yml
+    uses: ./.github/workflows/typecheck.yaml
 
   build:
     needs: [checks]
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/build.yaml
     secrets: inherit
 
   # deploy:
