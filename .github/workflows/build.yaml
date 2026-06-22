@@ -35,7 +35,7 @@ jobs:
             BUILD_ARGS="--build-arg VITE_API_URL=$VITE_API_URL"
           fi
 
-          cd ./${{ matrix.service }}
+          cd ./${{ matrix.service }} \
           docker build --platform linux/amd64 $BUILD_ARGS -t $IMAGE_SHA -t $IMAGE_LATEST .
           docker push $IMAGE_SHA
           docker push $IMAGE_LATEST
