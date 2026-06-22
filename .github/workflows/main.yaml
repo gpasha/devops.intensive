@@ -13,12 +13,15 @@ jobs:
     uses: ./.github/workflows/build.yaml
     secrets: inherit
 
-  # deploy:
-  #   needs: [build]
-  #   uses: ./.github/workflows/deploy.yml
-  #   with:
-  #     image_sha: ${{ needs.build.outputs.image_sha }}
-  #   secrets: inherit
+  deploy:
+    needs: [build]
+    strategy:
+      matrix:
+        service: [back, front]
+    uses: ./.github/workflows/deploy.yaml
+    with:
+      service_name: ${{ matrix.service }}
+    secrets: inherit
 
   # notify:
   #   needs: [checks, build, deploy]

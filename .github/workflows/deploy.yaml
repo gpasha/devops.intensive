@@ -1,0 +1,27 @@
+name: Deploy
+ 
+on:
+  workflow_call:
+    inputs:
+      service_name:
+        required: true
+        type: string
+ 
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+ 
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          SERVICE: ${{ inputs.service_name }}
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          envs: SERVICE
+          script: |
+            cd /homework_app
+            sed -i "s|^APP_VERSION=.*|APP_VERSION=sha-${{ github.sha }}|" .env.development.compose
+            docker compose up -d --no-deps $SERVICE
