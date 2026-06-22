@@ -1,0 +1,33 @@
+name: CI/CD Pipeline
+ 
+on:
+  push:
+    branches: [main]
+ 
+jobs:
+  checks:
+    uses: ./.github/workflows/typecheck.yml
+
+  build:
+    needs: [checks]
+    uses: ./.github/workflows/build.yml
+    secrets: inherit
+
+  # deploy:
+  #   needs: [build]
+  #   uses: ./.github/workflows/deploy.yml
+  #   with:
+  #     image_sha: ${{ needs.build.outputs.image_sha }}
+  #   secrets: inherit
+
+  # notify:
+  #   needs: [checks, build, deploy]
+  #   if: always()
+  #   uses: ./.github/workflows/notify.yml
+  #   with:
+  #     checks_result: ${{ needs.checks.result }}
+  #     build_result: ${{ needs.build.result }}
+  #     deploy_result: ${{ needs.deploy.result }}
+  #   secrets:
+  #     TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+  #     TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}

@@ -1,0 +1,49 @@
+name: Build
+ 
+on:
+  workflow_call:
+    outputs:
+      image_sha:
+        description: "The SHA of the built docker image"
+        value: ${{ jobs.build.outputs.image_sha }}
+ 
+jobs:
+  build:
+    name: Build (${{ matrix.service }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        service: [back, front]
+        include:
+          - service: front
+            is_front: true
+
+    outputs:
+      image_sha: ${{ steps.build-push.outputs.image_sha }}
+
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v3
+
+      - name: Login to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASS }}" | docker login -u ${{ vars.DOCKER_USER }} --password-stdin
+      
+      - name: Build and Push docker image
+        id: build-push
+        env:
+          IMAGE_SHA: ${{ vars.DOCKER_USER }}/todo-${{ matrix.service }}:sha-${{ github.sha }}
+          IMAGE_LATEST: ${{ vars.DOCKER_USER }}/todo-${{ matrix.service }}:latest
+          IS_FRONT: ${{ matrix.is_front }}
+        run: |
+          BUILD_ARGS=""
+
+          if [ "$IS_FRONT" = "true" ]; then
+            VITE_API_URL=$(grep '^VITE_API_URL=' .env.development.front | cut -d '=' -f2- | tr -d '"' | tr -d "'")
+            BUILD_ARGS="--build-arg VITE_API_URL=$VITE_API_URL"
+          fi
+
+          docker build $BUILD_ARGS -t $IMAGE_SHA -t $IMAGE_LATEST .
+          docker push $IMAGE_SHA
+          docker push $IMAGE_LATEST
+          echo "image_sha=$IMAGE_SHA" >> $GITHUB_OUTPUT
