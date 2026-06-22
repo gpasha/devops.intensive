@@ -15,12 +15,7 @@ jobs:
 
   deploy:
     needs: [build]
-    strategy:
-      matrix:
-        service: [back, front]
     uses: ./.github/workflows/deploy.yaml
-    with:
-      service_name: ${{ matrix.service }}
     secrets: inherit
 
   verify:
