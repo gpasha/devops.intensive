@@ -23,6 +23,11 @@ jobs:
       service_name: ${{ matrix.service }}
     secrets: inherit
 
+  verify:
+    needs: [deploy]
+    uses: ./.github/workflows/verify.yaml
+    secrets: inherit
+
   # notify:
   #   needs: [checks, build, deploy]
   #   if: always()
