@@ -21,9 +21,9 @@
 services:
   prometheus:
     image: prom/prometheus:latest
-    container_name: prometheus-hw
+    container_name: prometheus
     ports:
-      - "127.0.0.1:9091:9090"
+      - "127.0.0.1:9090:9090"
     volumes:
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - prometheus_data:/prometheus
@@ -37,9 +37,9 @@ services:
 
   grafana:
     image: grafana/grafana:latest
-    container_name: grafana-hw
+    container_name: grafana
     ports:
-      - "127.0.0.1:3003:3000"
+      - "127.0.0.1:3000:3000"
     volumes:
       - grafana_data:/var/lib/grafana
       - ./monitoring/grafana/provisioning/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yaml:ro
@@ -51,11 +51,25 @@ services:
       - loki
     restart: unless-stopped
 
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter-hw
+    pid: host
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    restart: unless-stopped
+
   loki:
     image: grafana/loki:latest
-    container_name: loki-hw
+    container_name: loki
     ports:
-      - "127.0.0.1:3101:3100"
+      - "127.0.0.1:3100:3100"
     volumes:
       - ./monitoring/loki-config.yaml:/etc/loki/local-config.yaml:ro
       - loki_data:/loki
@@ -64,7 +78,7 @@ services:
 
   promtail:
     image: grafana/promtail:latest
-    container_name: promtail-hw
+    container_name: promtail
     volumes:
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
       - /var/run/docker.sock:/var/run/docker.sock
