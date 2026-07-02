@@ -31,20 +31,9 @@ services:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.retention.time=15d'
     restart: unless-stopped
-
-  node-exporter:
-    image: prom/node-exporter:latest
-    container_name: node-exporter-hw
-    pid: host
-    volumes:
-      - /proc:/host/proc:ro
-      - /sys:/host/sys:ro
-      - /:/rootfs:ro
-    command:
-      - '--path.procfs=/host/proc'
-      - '--path.sysfs=/host/sys'
-      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
-    restart: unless-stopped
+    networks:
+      - homework_app_default
+      - myapp_app-network
 
   grafana:
     image: grafana/grafana:latest
@@ -90,3 +79,8 @@ volumes:
   prometheus_data:
   grafana_data:
   loki_data:
+
+networks:
+  homework_app_default:
+  myapp_app-network:
+    external: true
