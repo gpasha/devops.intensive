@@ -31,15 +31,12 @@ services:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.retention.time=15d'
     restart: unless-stopped
-    networks:
-      - homework_app_default
-      - myapp_app-network
 
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
     ports:
-      - "127.0.0.1:3000:3000"
+      - "127.0.0.1:3003:3000"
     volumes:
       - grafana_data:/var/lib/grafana
       - ./monitoring/grafana/provisioning/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yaml:ro
@@ -53,7 +50,7 @@ services:
 
   node-exporter:
     image: prom/node-exporter:latest
-    container_name: node-exporter-hw
+    container_name: node-exporter
     pid: host
     volumes:
       - /proc:/host/proc:ro
@@ -93,8 +90,3 @@ volumes:
   prometheus_data:
   grafana_data:
   loki_data:
-
-networks:
-  homework_app_default:
-  myapp_app-network:
-    external: true
