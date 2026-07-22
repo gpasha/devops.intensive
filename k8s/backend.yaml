@@ -22,8 +22,6 @@ spec:
       labels:
         app: backend
     spec:
-      imagePullSecrets:
-        - name: dockerhub-cred
       containers:
         - name: backend
           image: ${IMAGE}

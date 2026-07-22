@@ -17,11 +17,9 @@ spec:
       labels:
         app: frontend
     spec:
-      imagePullSecrets:
-        - name: dockerhub-cred
       containers:
         - name: frontend
-          image: ВАШ_ЛОГИН/todo-front:latest
+          image: pavelfullstackdeveloper/todo-front:latest
           ports:
             - containerPort: 80
           resources:

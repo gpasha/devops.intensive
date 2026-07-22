@@ -22,10 +22,10 @@ spec:
   ingressClassName: nginx
   tls:
     - hosts:
-        - ВАШ_ДОМЕН
+        - hw.devops-app.site
       secretName: app-tls           # сюда cert-manager положит сертификат Let's Encrypt
   rules:
-    - host: ВАШ_ДОМЕН
+    - host: hw.devops-app.site
       http:
         paths:
           - path: /api(/|$)(.*)

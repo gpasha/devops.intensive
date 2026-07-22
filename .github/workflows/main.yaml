@@ -1,8 +1,9 @@
 name: CI/CD Pipeline
  
 on:
-  push:
-    branches: [week5]
+  workflow_dispatch:
+  # push:
+  #   branches: [week5]
  
 jobs:
   checks:
