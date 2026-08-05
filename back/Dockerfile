@@ -24,6 +24,7 @@ RUN npm prune --omit=dev
 #   - Copy the compiled dist/ from the builder stage
 #   - EXPOSE the app port and start the server (node dist/main.js)
 FROM node:20-alpine AS runtime
+USER node
 WORKDIR /app
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist

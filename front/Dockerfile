@@ -26,6 +26,7 @@ RUN npm run build
 #   - Copy the custom nginx.conf into /etc/nginx/conf.d/
 #   - EXPOSE port 80 and run nginx in the foreground
 FROM nginx:alpine AS runtime
+USER node
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=builder /app/dist /usr/share/nginx/html
 EXPOSE 80
