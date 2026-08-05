@@ -8,6 +8,9 @@ env:
   IMAGE_TAG: sha-${{ github.sha }}
  
 jobs:
+  security-scan:
+    uses: ./.github/workflows/sast-sca.yml
+
   build:
     runs-on: ubuntu-latest
     outputs:
