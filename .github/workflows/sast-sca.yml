@@ -15,7 +15,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |
-          semgrep scan --config=p/typescript --config=p/nodejs --config=p/owasp-top-ten --error
+          semgrep scan \
+            --config=p/typescript \
+            --config=p/nodejs \
+            --config=p/owasp-top-ten \
+            --error \
             --exclude=node_modules \
             --exclude=dist \
             --exclude=build \
