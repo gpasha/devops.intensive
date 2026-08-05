@@ -12,6 +12,7 @@ jobs:
     uses: ./.github/workflows/sast-sca.yml
 
   build:
+    needs: security-scan
     runs-on: ubuntu-latest
     outputs:
       image_tag: ${{ env.IMAGE_TAG }}
