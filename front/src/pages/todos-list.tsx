@@ -107,7 +107,7 @@ export function TodosListPage() {
           className="py-12 text-center text-sm text-muted-foreground"
           data-testid="todos-empty"
         >
-          No todos yet. Add one above!
+          No todos yet. Add one above.
         </p>
       )}
 
